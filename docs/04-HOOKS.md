@@ -27,9 +27,9 @@ O hook e selecionado por um `matcher`, que casa com o nome da ferramenta.
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Bash|Edit|Write|MultiEdit|NotebookEdit",
+        "matcher": "Bash|PowerShell|Edit|Write|MultiEdit|NotebookEdit",
         "hooks": [
-          { "type": "command", "command": "python \"<SEU_CAMINHO>/hooks/main_guard.py\"", "timeout": 10 }
+          { "type": "command", "command": "python \"<SEU_CAMINHO>/.claude/hooks/main_guard.py\"", "timeout": 10 }
         ]
       }
     ]
@@ -53,15 +53,16 @@ nao depende de ele lembrar: o guard bloqueia.
 Leitura, local ou remota: listar, ler, contar, medir, procurar, ver estado de servico, ver historico
 de versao, consultar com uma consulta somente de leitura, fazer uma requisicao de leitura.
 
-Tambem passam formas compostas de leitura: entrar num diretorio e ler, encadear filtros de texto,
-rodar um trecho de script que so le.
+Tambem passam formas compostas de leitura: entrar num diretorio e ler, encadear filtros de texto.
+Envelopador de script (`python -c`, `python x.py`, `bash x.sh` etc.) fica fora da allowlist e e
+negado sem ler o conteudo (ver decisao "Dois" abaixo), mesmo que o script em si so leia.
 
 ### O que nao passa, em nenhuma hipotese
 
 | Categoria | Exemplos |
 |---|---|
 | **Caminho protegido** | Diretorio dos proprios hooks de guarda, arquivo de configuracao do sistema de hooks, ganchos de versionamento, e qualquer caminho extra que voce listar em `HAOS_GUARD_PROTECTED` (ex: a pasta de segredo do seu projeto - a lista fixa do pacote NAO inclui uma pasta de segredo por padrao, voce precisa declarar a sua) |
-| **Script que envia ou emite** | Qualquer script cujo nome carregue palavra de envio, emissao ou disparo, em qualquer pasta |
+| **Script que envia ou emite** | Nao existe checagem por nome: qualquer envelopador de script (`python x.py`, `bash x.sh`, `-File y.ps1`, `npm run`...) fica fora da allowlist e e negado sem ler o conteudo, em qualquer pasta |
 | **Envio externo** | Requisicao que escreve, cria ou apaga em servico de terceiro |
 | **Destrutivo e infra** | Publicar no repositorio remoto, apagar, descartar mudanca local, matar processo, parar ou remover container, agendar tarefa, espelhar diretorio com remocao, esvaziar registro de sistema, escrever no banco |
 

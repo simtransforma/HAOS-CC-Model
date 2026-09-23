@@ -102,6 +102,11 @@ cp examples/settings.json.example ~/.claude/settings.json
 
 Se voce **ja tem**, nao sobrescreva. Abra os dois e funda apenas as chaves `hooks` e `env`.
 
+> **Nao misture com instalacao por plugin.** Este pacote tambem tem `.claude-plugin/plugin.json` e
+> `hooks/hooks.json` (usa `${CLAUDE_PLUGIN_ROOT}`), prontos para `claude plugin install`/marketplace.
+> Escolha SO UM caminho: copia manual (este passo 3.5) OU plugin. Fazer os dois registra o
+> `main_guard.py` duas vezes no `PreToolUse` e duplica toda decisao.
+
 > **Windows: nunca cole um caminho com barra invertida (`\`) dentro do JSON.** `"C:\Users\voce\..."`
 > quebra o parser (`\U` e `\u` sao sequencias de escape validas em JSON e o resto nao e). Use barra
 > normal mesmo em caminho local: `"C:/Users/voce/.claude"`. Se colar e o `settings.json` parar de

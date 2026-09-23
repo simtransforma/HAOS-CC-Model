@@ -16,7 +16,7 @@ Esta é uma demanda pro **departamento @dados**.
 3. **Se vários (multi-agente)**: orquestre delegação em paralelo (criar N sub-agentes em paralelo), depois consolide
 4. **Sempre passe:** objetivo, dados disponíveis, formato esperado, prazo, e as skills aplicáveis, nomeadas
 
-**Skills e agentes obrigatórios deste departamento:** due diligence de empresa, fornecedor, compra, consultoria ou oferta high-ticket vai para @auditor-confianca no padrão `DEEP_AUDIT`, sem envio automático: o PDF fica pronto e o envio só sai com OK do Gian.
+**Skills e agentes obrigatórios deste departamento:** due diligence de empresa, fornecedor, compra, consultoria ou oferta high-ticket vai para @auditor-confianca no padrão `DEEP_AUDIT`, sem envio automático: o PDF fica pronto e o envio só sai com OK do operador.
 
 ## Retorno esperado dos sub-agentes
 Cada um deve retornar com status: **CONCLUÍDO** / **BLOQUEADO** (especificar bloqueio) / **REVISÃO** (precisa validação humana).

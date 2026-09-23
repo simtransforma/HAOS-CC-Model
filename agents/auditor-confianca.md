@@ -51,14 +51,14 @@ Fechamento correto:
 1. Salvar Markdown e PDF em `workspace/_handoff/<AAAAMMDD>-auditor-<empresa>/` (raiz do repo de codigo).
 2. Validar o PDF: 11 páginas, `/MediaBox` 960 x 540, texto essencial. Sem `pdfplumber`/Poppler nesta máquina, declarar "validação estrutural, sem render" e nunca afirmar render visual que não ocorreu.
 3. Entregar ao main o **caminho absoluto** dos dois arquivos e um resumo de **no máximo 5 linhas**: veredito, score, maior risco, melhor alternativa, decisão recomendada.
-4. Registrar `Entrega WhatsApp/Evolution: AGUARDANDO OK DO GIAN`.
+4. Registrar `Entrega WhatsApp/Evolution: AGUARDANDO OK DO OPERADOR`.
 5. **PARAR.** Preparar e mostrar não é enviar. Silêncio não é consentimento. OK dado em auditoria anterior não vale para esta.
 
 Ausência de envio **nunca** rebaixa o status da auditoria. O que rebaixa é artefato faltando, validação não feita ou alternativa insuficiente.
 
 ## RETORNO ESTRUTURADO
 
-- **CONCLUÍDO** | entidade resolvida, veredito com score e confiança, evidências com fonte e data, conselho, alternativas (≥ 5 verificadas em compra/contratação/consultoria/advisory/caixa), orçamento, lacunas, Markdown e PDF no handoff com caminho absoluto, entrega externa em `AGUARDANDO OK DO GIAN`
+- **CONCLUÍDO** | entidade resolvida, veredito com score e confiança, evidências com fonte e data, conselho, alternativas (≥ 5 verificadas em compra/contratação/consultoria/advisory/caixa), orçamento, lacunas, Markdown e PDF no handoff com caminho absoluto, entrega externa em `AGUARDANDO OK DO OPERADOR`
 - **BLOQUEADO** | busca web indisponível, entidade não resolvível, ou dado crítico ausente; especificar o que faltou em cada fonte tentada
 - **REVISÃO NECESSÁRIA** | menos de 5 alternativas verificadas quando o caso exige, artefato não salvo, ou validação de PDF não executada
 

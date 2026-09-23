@@ -15,17 +15,17 @@ Delegue esta demanda diretamente pro subagent **@auditor-confianca**.
    - Decisão que a auditoria apoia: comprar, contratar, indicar, parceria, investir, comparar ou evitar
    - Categoria e jurisdição
    - Profundidade: padrão é **DEEP_AUDIT** para fornecedor, compra, contratação, consultoria, advisory e high-ticket
-   - Dados/arquivos disponíveis (proposta, print, contrato que o Gian já tenha)
+   - Dados/arquivos disponíveis (proposta, print, contrato que o operador já tenha)
    - Formato esperado do output
    - Prazo (se houver)
 3. **Se faltar dado crítico** para resolver homônimo ou jurisdição, peça o brief ANTES de delegar
 4. **Aguarde retorno** com status CONCLUÍDO / BLOQUEADO / REVISÃO NECESSÁRIA
 
-## Fechamento: ele prepara, o Gian decide
+## Fechamento: ele prepara, o operador decide
 
-O agente salva o relatório Markdown e o PDF em `workspace/_handoff/<AAAAMMDD>-auditor-<empresa>/`, valida o PDF, devolve o **caminho absoluto** mais um resumo de até 5 linhas, e **para** com `Entrega WhatsApp/Evolution: AGUARDANDO OK DO GIAN`.
+O agente salva o relatório Markdown e o PDF em `workspace/_handoff/<AAAAMMDD>-auditor-<empresa>/`, valida o PDF, devolve o **caminho absoluto** mais um resumo de até 5 linhas, e **para** com `Entrega WhatsApp/Evolution: AGUARDANDO OK DO OPERADOR`.
 
-O envio por WhatsApp só acontece se o Gian autorizar explicitamente no turno. Ausência de envio não rebaixa o status da auditoria.
+O envio por WhatsApp só acontece se o operador autorizar explicitamente no turno. Ausência de envio não rebaixa o status da auditoria.
 
 ## Quando NÃO usar
 - Pesquisa de mercado, tendência, público-alvo ou mapeamento genérico de concorrente → `/haos:pesquisador`
