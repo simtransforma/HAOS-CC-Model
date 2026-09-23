@@ -1,66 +1,59 @@
-# HAOS CC Model
+<div align="center">
 
-### Sistema multi agente para Claude Code: orquestrador, agentes especialistas, skills, hooks de seguranca e memoria persistente
+# HAOS-CC-Model
 
-> Este repositorio e um **modelo de referencia**. Ele mostra a estrutura, as regras e os mecanismos
-> de um sistema multi agente que roda em producao ha meses, sem nenhum dado da operacao que o
-> originou. Voce clona, adapta e instala na sua maquina.
+### HAU Autonomous Operations Squad - Modelo Aberto para Claude Code
 
-**Licenca:** MIT | **Idioma:** portugues do Brasil | **Plataforma:** [Claude Code](https://docs.claude.com/en/docs/claude-code/overview)
+**Sistema multiagente de referencia, pronto para clonar e adaptar: orquestrador com trava de delegacao por hook, 30 agentes especialistas, skills sob demanda, memoria persistente entre sessoes e governanca humana em ponto critico.**
 
----
+*by [**HAU Solucoes Digitais**](https://github.com/simtransforma)*
 
-## Sumario
+[![Plugin Claude Code](https://img.shields.io/badge/claude--code-plugin-blue?logo=anthropic)](https://claude.com/claude-code)
+[![Version](https://img.shields.io/badge/version-1.0.0-blue)](.claude-plugin/plugin.json)
+[![Agents](https://img.shields.io/badge/agentes-30-green)](#agentes-30)
+[![Commands](https://img.shields.io/badge/commands-44-orange)](#comandos-44)
+[![Skills](https://img.shields.io/badge/skills-25-purple)](#skills-25)
+[![Departments](https://img.shields.io/badge/departamentos-8-yellow)](#departamentos-8)
+[![License](https://img.shields.io/badge/license-MIT-brightgreen)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](CONTRIBUTING.md)
 
-1. [O problema que isso resolve](#o-problema-que-isso-resolve)
-2. [O que e o HAOS](#o-que-e-o-haos)
-3. [Arquitetura em uma imagem](#arquitetura-em-uma-imagem)
-4. [As seis camadas](#as-seis-camadas)
-5. [Instalacao em 5 passos](#instalacao-em-5-passos)
-6. [Exemplo de uso de ponta a ponta](#exemplo-de-uso-de-ponta-a-ponta)
-7. [Documentacao por camada](#documentacao-por-camada)
-8. [O que este modelo nao traz](#o-que-este-modelo-nao-traz)
-9. [Referencias e credito de origem](#referencias-e-credito-de-origem)
+</div>
 
 ---
 
-## O problema que isso resolve
-
-Quem usa um assistente de codigo por muito tempo esbarra sempre nos mesmos quatro problemas.
-
-**Um.** O assistente afirma coisas que nao verificou. Ele olha um comando, nao acha o que procurava
-e conclui que a coisa nao existe. Decisao certa em cima de premissa falsa custa caro.
-
-**Dois.** O assistente principal faz tudo sozinho. Ele le, escreve, deploya, apaga. A janela de
-contexto entope, a qualidade cai e um comando destrutivo passa sem ninguem revisar.
-
-**Tres.** Nada e lembrado. A cada sessao nova o mesmo erro volta, a mesma pegadinha e redescoberta,
-a mesma explicacao e dada de novo.
-
-**Quatro.** Tarefa grande vira improviso. Nao existe um rito que force diagnostico antes de
-estrategia, estrategia antes de execucao, e QA antes de gastar dinheiro.
-
-O HAOS ataca os quatro com mecanismo, nao com boa intencao escrita no prompt. Regra que depende de o
-modelo lembrar de obedecer e sugestao. Regra que um hook bloqueia e regra.
+> **Este repositorio e um modelo de referencia, nao a operacao real.** Ele mostra a estrutura, as
+> regras e os mecanismos de um sistema multiagente que roda em producao ha meses, sem nenhum dado
+> da operacao que o originou: sem segredo, sem endereco de infraestrutura, sem skill amarrada a
+> cliente ou marca. Voce clona, adapta e instala na sua maquina. O modelo interno completo (privado)
+> e o HAOS_CC; este e a versao publica e sanitizada dele.
 
 ---
 
-## O que e o HAOS
+## O que e o HAOS?
 
-HAOS quer dizer **Autonomous Operations Squad**. Na pratica sao seis camadas que se encaixam.
+**HAOS (HAU Autonomous Operations Squad)** e um framework para [Claude Code](https://claude.com/claude-code) que transforma o terminal numa squad inteira operada por IA: agentes especializados organizados em departamentos, pipeline de governanca, memoria persistente entre sessoes e gates humanos antes de acao irreversivel.
+
+**Nao sao chatbots.** Os agentes executam: geram codigo, copy, analise, plano, campanha. Param e pedem aprovacao quando vao publicar, gastar ou enviar algo.
+
+Na pratica sao **seis camadas** que se encaixam.
 
 | Camada | O que faz | Onde mora |
 |---|---|---|
-| **Lei** | O arquivo CLAUDE.md que define identidade, regras inegociaveis e roteamento | `~/.claude/CLAUDE.md` |
+| **Lei** | O CLAUDE.md que define identidade, regras inegociaveis e roteamento | `~/.claude/CLAUDE.md` |
 | **Orquestrador** | A sessao principal. Classifica o pedido, executa o trivial, delega o resto | sessao do Claude Code |
-| **Agentes** | 30 especialistas com missao, tom e limites proprios | `agents/` |
+| **Agentes** | 30 especialistas com missao, tom e limite proprios | `agents/` |
 | **Skills** | Conhecimento sob demanda que o modelo carrega quando o assunto aparece | `skills/` |
 | **Hooks** | Codigo que intercepta a ferramenta antes de ela rodar e pode bloquear | `hooks/` |
 | **Memoria** | Registro duravel de decisao, erro e procedimento, com fechamento ritualizado | `~/.claude/projects/` |
 
-A ideia central e simples de enunciar e dificil de manter: **o orquestrador nao e executor**. Ele le,
-decide e distribui. Quem muda estado e um agente especialista, com briefing explicito e com um hook
-vigiando.
+### Por que isso importa?
+
+- **Especializacao real**: cada agente tem identidade, framework e regras "nunca". Nao e um modelo generico fazendo tudo.
+- **Governanca incorporada por mecanismo, nao por boa intencao**: um hook PreToolUse bloqueia mutacao do orquestrador antes de ela rodar. Regra que depende do modelo lembrar de obedecer e sugestao; regra que um hook trava e regra.
+- **A pergunta certa nao e "posso usar essa ferramenta?"**: e "isso muda estado, apaga ou envia algo, ou e so leitura?". Leitura o orquestrador faz direto, em qualquer volume; mutacao ele sempre delega para um agente especialista.
+- **Memoria eterna**: hooks SessionStart/Stop/PostCompact preservam contexto entre sessoes, sem exigir que voce reexplique a mesma coisa toda vez.
+- **Plug-and-play**: instala como plugin oficial do Claude Code, namespace `/haos:*`.
+- **Open source (MIT)**: clone, adapte, contribua.
 
 ---
 
@@ -109,18 +102,9 @@ vigiando.
                               +-----------------------+
 ```
 
----
-
-## As seis camadas
-
-### 1. A lei (CLAUDE.md)
-
-Um arquivo de texto carregado em toda sessao, em qualquer pasta. Define quem o assistente e, como
-ele fala, o que ele nunca faz e para quem ele delega o que.
-
-A regra que precede todas as outras se chama **verificar antes de afirmar**. Ela proibe declarar como
-fato qualquer coisa sobre estado de sistema, mecanismo ou historico sem ter checado. E ela traz uma
-heuristica dura que vale a pena copiar mesmo que voce nao use mais nada deste repositorio:
+A regra que precede todas as outras dentro da lei se chama **verificar antes de afirmar**: proibe
+declarar como fato qualquer coisa sobre estado de sistema, mecanismo ou historico sem checar. A
+heuristica que sustenta ela vale copiar mesmo que voce nao use mais nada deste repositorio:
 
 > **"nao achei em X" nunca e "nao existe".** Uma amostra nao prova o todo. Antes de cravar qualquer
 > negativo ou absoluto, trate a frase como hipotese a refutar: cheque por outro caminho e consulte a
@@ -128,67 +112,30 @@ heuristica dura que vale a pena copiar mesmo que voce nao use mais nada deste re
 
 Detalhe completo em [docs/07-REGRAS.md](docs/07-REGRAS.md).
 
-### 2. O orquestrador
-
-A sessao principal. A pergunta que ele faz antes de agir nao e "posso usar essa ferramenta?", e
-**"isso muda estado, apaga ou envia algo, ou e so leitura?"**.
-
-Leitura pura ele faz direto, em qualquer volume. Mutacao ele delega. Isso nao e disciplina, e travado
-por hook.
-
-### 3. Os agentes
-
-Trinta especialistas. Cada um e um arquivo markdown com missao, tom, framework de trabalho, formato
-de saida e uma lista de coisas que ele nunca faz. Eles nao conversam, eles entregam.
-
-Lista completa e criterio de acionamento em [docs/02-AGENTES.md](docs/02-AGENTES.md).
-
-### 4. As skills
-
-Conhecimento empacotado que o modelo carrega quando o assunto aparece, e ignora quando nao aparece. E
-o que permite ter centenas de paginas de procedimento sem entupir a janela de contexto.
-
-Como funciona e como escrever a sua em [docs/03-SKILLS.md](docs/03-SKILLS.md).
-
-### 5. Os hooks
-
-A parte que transforma regra em mecanismo. Um hook e um programa que o Claude Code chama antes ou
-depois de um evento. Se ele devolve bloqueio, a ferramenta nao roda.
-
-O que cada hook intercepta e por que em [docs/04-HOOKS.md](docs/04-HOOKS.md).
-
-### 6. A memoria
-
-Tres camadas, da mais barata para a mais cara: arquivos markdown de memoria duravel, memoria de
-sessao vetorial, e a fonte viva (o codigo e o servidor de verdade). A regra de frescor manda: para
-estado que muda sozinho, so o comando ao vivo fecha a questao.
-
-Fluxo e ritual de fechamento em [docs/05-MEMORIA.md](docs/05-MEMORIA.md).
-
 ---
 
 ## Instalacao em 5 passos
 
-### Pre requisitos
+### Pre-requisitos
 
 | Item | Versao minima | Para que |
 |---|---|---|
 | [Claude Code](https://docs.claude.com/en/docs/claude-code/overview) | atual | o runtime |
-| Python | 3.10 | roda os hooks |
+| Python | 3.10+ | roda os hooks |
 | Git | 2.30 | versiona e fecha tarefa |
 | PowerShell 7 ou bash | atual | scripts de fechamento |
 
 ### Passo 1: clone
 
 ```bash
-git clone https://github.com/<SEU_USUARIO>/HAOS-CC-Model.git
+git clone https://github.com/simtransforma/HAOS-CC-Model.git
 cd HAOS-CC-Model
 ```
 
 ### Passo 2: instale a lei
 
-Copie o exemplo para o seu diretorio de configuracao e edite os blocos marcados com `<...>`. Sao
-poucos: seu nome, seu fuso e para quem voce delega o que.
+Copie o exemplo para o seu diretorio de configuracao e edite os blocos marcados com `<...>`: seu
+nome, seu fuso, para quem voce delega o que.
 
 ```bash
 cp examples/CLAUDE.md.example ~/.claude/CLAUDE.md
@@ -204,8 +151,8 @@ cp -r commands/. ~/.claude/commands/
 
 ### Passo 4: ligue os hooks
 
-Copie os hooks. O `settings.json` de exemplo so pode ser copiado por cima se voce **ainda nao tem
-um**; se ja tem, funda apenas os blocos `hooks` e `env`, nunca sobrescreva o arquivo inteiro.
+Copie os hooks. O settings.json de exemplo so pode ser copiado por cima se voce ainda nao tem
+um; se ja tem, funda apenas os blocos hooks e env, nunca sobrescreva o arquivo inteiro.
 
 ```bash
 cp -r hooks/. ~/.claude/hooks/
@@ -214,7 +161,7 @@ cp -r hooks/. ~/.claude/hooks/
 cp examples/settings.json.example ~/.claude/settings.json
 ```
 
-Edite as variaveis do bloco `env`, incluindo `HAOS_GUARD_PROFILE` com a raiz real do seu projeto
+Edite as variaveis do bloco env, incluindo HAOS_GUARD_PROFILE com a raiz real do seu projeto
 (sem ela o guard fica fechado em qualquer pasta ate voce configurar). Nenhuma variavel guarda
 segredo: elas guardam **caminhos** e o **nome** do arquivo onde os seus segredos moram. Detalhe
 completo em [INSTALL.md](INSTALL.md#36-configure-as-variaveis).
@@ -225,14 +172,11 @@ completo em [INSTALL.md](INSTALL.md#36-configure-as-variaveis).
 python hooks/selftest.py
 ```
 
-O selftest confirma duas coisas: (1) que voce configurou o perfil do guard com a raiz real do seu
-projeto, sem deixar o marcador de fabrica; (2) que uma bateria extensa de vetores de bypass (comando
-encadeado, redirecionamento disfarcado, auto-desarme, spawn sem tier de modelo, entre outros) continua
-sendo bloqueada. Ele nao confere versao de Python nem contagem de agentes/skills. Detalhe completo em
-[INSTALL.md](INSTALL.md#4-validacao).
-
-Se qualquer vetor passar como liberado quando deveria bloquear, a instalacao esta errada e o sistema
-esta aberto. Nao siga em frente. O guia de diagnostico esta em [INSTALL.md](INSTALL.md).
+O selftest confirma duas coisas: que voce configurou o perfil do guard com a raiz real do seu
+projeto, sem deixar o marcador de fabrica; e que uma bateria extensa de vetores de bypass (comando
+encadeado, redirecionamento disfarcado, auto-desarme, spawn sem tier de modelo, entre outros)
+continua sendo bloqueada. Se qualquer vetor passar como liberado quando deveria bloquear, a
+instalacao esta errada e o sistema esta aberto: nao siga em frente, veja [INSTALL.md](INSTALL.md).
 
 ---
 
@@ -254,22 +198,171 @@ MODELO: sonnet porque e implementacao de rotina em stack conhecida
 Delegando para dev-backend com a skill de desenvolvimento orientado a teste.
 ```
 
-**3. O hook do roteador de modelo confere.** Spawn sem modelo declarado e bloqueado. Spawn com modelo
-declarado passa e fica registrado.
+**3. O hook do roteador de modelo confere.** Spawn sem modelo declarado e bloqueado. Spawn com
+modelo declarado passa e fica registrado.
 
-**4. O agente trabalha.** Ele le o codigo, escreve o teste que falha, implementa, roda o teste, mostra
-a saida. Ele nao diz "pronto", ele mostra a evidencia.
+**4. O agente trabalha.** Ele le o codigo, escreve o teste que falha, implementa, roda o teste,
+mostra a saida. Ele nao diz "pronto", ele mostra a evidencia.
 
-**5. O revisor entra.** Um segundo agente le tudo que a tarefa mudou, incluindo arquivo novo ainda nao
-versionado, e devolve achados. Estourar o numero de rodadas de revisao nao aprova o trabalho: defeito
-que sobrou vira pendencia explicita.
+**5. O revisor entra.** Um segundo agente le tudo que a tarefa mudou, incluindo arquivo novo ainda
+nao versionado, e devolve achados. Estourar o numero de rodadas de revisao nao aprova o trabalho:
+defeito que sobrou vira pendencia explicita.
 
-**6. O fechamento roda.** O conceito: um comando unico decide se houve aprendizado duravel; se houve,
-vira memoria; se nao, so fecha; commit e espelho da memoria acontecem no mesmo passo. **Este pacote
-traz a doutrina e o hook de captura (`session_end.py`), nao o comando pronto** — ver
+**6. O fechamento roda.** Um passo unico decide se houve aprendizado duravel; se houve, vira
+memoria; se nao, so fecha; commit e espelho da memoria acontecem no mesmo passo. Este pacote traz a
+doutrina e o hook de captura (session_end.py), nao o comando pronto de fechamento: veja
 [docs/05-MEMORIA.md](docs/05-MEMORIA.md#5-o-ritual-de-fechamento).
 
 O ganho nao e velocidade, e que o caminho errado fica dificil de percorrer.
+
+---
+
+## Departamentos (8)
+
+| Departamento | Entry-point | Agentes | Foco |
+|---|---|:-:|---|
+| `/haos:conselho` | estrategista-chefe | 4 | Estrategia, decisoes criticas, conflitos |
+| `/haos:criativo` | copy-specialist | 5 | Copy, design, video, conteudo, social |
+| `/haos:trafego` | traffic-master | 3 | Midia paga, tracking |
+| `/haos:dados` | data-analyst | 4 | Analise, BI, pesquisa, due diligence |
+| `/haos:funnel` | funnel-architect | 4 | Funis, automacao, CRM, email |
+| `/haos:produto` | product-manager | 4 | PM, UX, dev frontend/backend |
+| `/haos:orquestracao` | qa-reviewer | 4 | QA, PM, compliance, devops |
+| `/haos:seguranca` | chuck-norris | 2 | Security, concierge para entrada sem destino |
+
+---
+
+## Agentes (30)
+
+Cada agente tem identidade, framework de fases, principios "norte", regras "nunca" e formato de
+retorno estruturado (CONCLUIDO / BLOQUEADO / REVISAO). Criterio para criar o seu:
+[docs/02-AGENTES.md](docs/02-AGENTES.md).
+
+<details>
+<summary><b>@conselho (4)</b></summary>
+
+- **main** - orquestrador principal: classifica, roteia, consolida, nunca executa mutacao sozinho
+- **estrategista-chefe** - posicionamento, cenarios, priorizacao de portfolio, decisao de expansao
+- **diretor-criativo** - direcao criativa, poder de veto, brand guidelines, revisao de 10 dimensoes
+- **cmo** - ROI, funil, critica de criativo, questiona decisao comercial e exige dado
+</details>
+
+<details>
+<summary><b>@criativo (5)</b></summary>
+
+- **copy-specialist** - copy de conversao (headline, VSL, email, WhatsApp, landing, carrossel), sempre com variacao A/B
+- **content-strategist** - calendario editorial, briefing de conteudo, estrategia cross-platform, analise de performance organica
+- **designer** - producao visual (carrossel, banner, thumbnail, social card), acessibilidade e mobile-first
+- **videomaker** - roteiro, storyboard, edicao de video curto e longo, obsessao pelos 3 primeiros segundos
+- **sm-social** - execucao de calendario, gestao de comunidade, metrica semanal por plataforma, crise de reputacao
+</details>
+
+<details>
+<summary><b>@trafego (3)</b></summary>
+
+- **traffic-master** - plano de midia, briefing ao media-buyer, publico/budget/KPI, debrief de ciclo
+- **media-buyer** - execucao tatica: setup, otimizacao diaria, scaling, protocolo de crise
+- **tracking-engineer** - pixel, evento, CAPI, GTM/GA4, UTM, green light de tracking antes de campanha subir
+</details>
+
+<details>
+<summary><b>@dados (4)</b></summary>
+
+- **data-analyst** - diagnostico diario, relatorio semanal, analise de funil, sempre termina com recomendacao
+- **bi-engineer** - pipeline ETL, modelagem star schema, dashboard, integracao de nova fonte de dado
+- **pesquisador** - concorrencia, tendencia, benchmark, publico-alvo; toda entrega tem fonte e data
+- **auditor-confianca** - due diligence de empresa e fornecedor por OSINT legal, score com gate bloqueante, nunca envia sem OK
+</details>
+
+<details>
+<summary><b>@funnel (4)</b></summary>
+
+- **funnel-architect** - jornada ponta a ponta, sistema de tags, especificacao de funil e handoff tecnico
+- **automation-engineer** - workflow de automacao, webhook, integracao entre plataforma, idempotencia
+- **crm-specialist** - pipeline comercial, cadencia de follow-up, script de objecao, higiene de base
+- **email-marketer** - sequencia (boas-vindas, nutricao, lancamento, reativacao), segmentacao, deliverability
+</details>
+
+<details>
+<summary><b>@produto (4)</b></summary>
+
+- **product-manager** - discovery, PRD, priorizacao RICE, metrica de produto, plano de lancamento
+- **ux-researcher** - teste de usabilidade, heuristica de Nielsen, WCAG, jornada, recomendacao priorizada
+- **dev-frontend** - landing page, checkout, componente, Core Web Vitals, tracking no codigo, acessibilidade
+- **dev-backend** - endpoint, integracao externa, webhook, migracao de dado, hardening de backend
+</details>
+
+<details>
+<summary><b>@orquestracao (4)</b></summary>
+
+- **qa-reviewer** - gate antes de publicar/deployar, parecer formal APROVADO / AJUSTES / REPROVADO
+- **project-manager** - WBS, dependencia, kanban, progresso com evidencia, escalonamento no tempo certo
+- **compliance-officer** - legislacao, politica de plataforma, poder de veto sobre publicacao de risco alto
+- **devops** - deploy, rollback, troubleshooting de producao, secret, backup, resposta a incidente
+</details>
+
+<details>
+<summary><b>@seguranca (2)</b></summary>
+
+- **chuck-norris** - auditoria de servidor/container, hardening, vetting de skill externa, revisao OWASP, audit-only
+- **concierge** - roteador de entrada sem destino explicito; classifica e encaminha, nao executa
+</details>
+
+---
+
+## Comandos (44)
+
+### Operacao (8)
+| Comando | Funcao |
+|---|---|
+| `/haos:setup` | Wizard de configuracao inicial |
+| `/haos:menu` | Menu interativo principal |
+| `/haos:base` | Visao geral do sistema |
+| `/haos:agentes` | Lista os 30 agentes |
+| `/haos:departamentos` | Lista os 8 departamentos |
+| `/haos:rito` | Pipeline Rito v2 (13 fases, so marketing/lancamento) |
+| `/haos:main` | Aciona o orquestrador diretamente |
+| `/haos:concierge` | Roteador para quem nao sabe qual agente acionar |
+
+### Departamentos (8)
+`/haos:conselho` - `/haos:criativo` - `/haos:trafego` - `/haos:dados` - `/haos:funnel` - `/haos:produto` - `/haos:orquestracao` - `/haos:seguranca`
+
+### Agentes (30)
+Cada um dos 30 agentes tem seu proprio atalho `/haos:{nome}` - ex.: `/haos:cmo`, `/haos:dev-backend`, `/haos:copy-specialist`, `/haos:auditor-confianca`.
+
+Indice completo: `commands/`.
+
+---
+
+## Skills (25)
+
+Skills carregadas sob demanda, quando o assunto aparece na conversa.
+
+| Categoria | Skills |
+|---|---|
+| **Desenvolvimento** | `software-engineer`, `software-architecture`, `design-principles` |
+| **Marketing e produto** | `copywriting`, `unit-economics` |
+| **Pesquisa e verificacao** | `haos-deep-research`, `haos-query-expansion`, `haos-source-quality-auditor`, `haos-claim-verification`, `haos-research-report-writer` |
+| **Governanca e execucao HAOS** | `haos-auditoria-master`, `haos-execution-waves`, `haos-handoff-artefato`, `haos-memory-provenance`, `haos-memory-triple`, `haos-model-router`, `haos-multi-agent-review`, `haos-project-sanitation`, `haos-quality-gates`, `haos-structural-refactor`, `token-optimizer` |
+| **Operacao de sessao** | `long-running-agent`, `servidor-compartilhado`, `session-handoff` |
+| **Meta (skill sobre skill)** | `skill-creator` |
+
+Anatomia de uma SKILL.md e como escrever a sua: [docs/03-SKILLS.md](docs/03-SKILLS.md).
+
+---
+
+## Memoria persistente (hooks automaticos)
+
+| Hook | Quando dispara | O que faz |
+|---|---|---|
+| `session_start.py` | Inicio de cada sessao | Injeta estado, pendencia e alerta |
+| `session_end.py` | Fim de cada resposta (Stop) | Captura o que aconteceu e alimenta a memoria |
+| `post_compact.py` | Apos compactacao do contexto | Reinjeta o essencial |
+| `prompt_router.py` | Envio de cada mensagem | Reconhece prefixo de modo, avisa de rito ativo |
+
+Memoria vive em `~/.claude/projects/{seu-projeto}/memory/`, descoberta dinamicamente pelo cwd
+(sem caminho fixo em codigo). Camadas, regra de frescor e ritual de fechamento em
+[docs/05-MEMORIA.md](docs/05-MEMORIA.md).
 
 ---
 
@@ -279,7 +372,7 @@ O ganho nao e velocidade, e que o caminho errado fica dificil de percorrer.
 |---|---|
 | [docs/01-ARQUITETURA.md](docs/01-ARQUITETURA.md) | Como as camadas se encaixam, fluxo de uma tarefa, decisoes de projeto e o que foi descartado |
 | [docs/02-AGENTES.md](docs/02-AGENTES.md) | Os 30 agentes, o que cada um faz, quando aciona, e como criar o seu |
-| [docs/03-SKILLS.md](docs/03-SKILLS.md) | O que e uma skill, como o modelo escolhe, anatomia de um SKILL.md, como escrever a sua |
+| [docs/03-SKILLS.md](docs/03-SKILLS.md) | O que e uma skill, como o modelo escolhe, anatomia de um SKILL.md |
 | [docs/04-HOOKS.md](docs/04-HOOKS.md) | Cada hook, o que intercepta, por que existe, e a Regra de Ouro explicada |
 | [docs/05-MEMORIA.md](docs/05-MEMORIA.md) | As camadas de memoria, a regra de frescor, o ritual de fechamento |
 | [docs/06-RITO.md](docs/06-RITO.md) | O pipeline de 13 fases com portoes bloqueantes |
@@ -295,23 +388,37 @@ O ganho nao e velocidade, e que o caminho errado fica dificil de percorrer.
 Transparencia e parte do modelo. Isto aqui **nao** vem no pacote, de proposito.
 
 - **Skills de cliente e de marca.** O sistema de origem tem dezenas de skills amarradas a ERP, CRM,
-  gateway de pagamento e marketplaces especificos. Elas nao servem para voce e carregariam dado de
-  terceiro. Ficaram de fora. O que entra e a **estrutura** e alguns exemplos neutros que mostram o
-  padrao.
+  gateway de pagamento e marketplace especificos. Nao servem para voce e carregariam dado de
+  terceiro. Ficou de fora; entrou a **estrutura** e exemplos neutros que mostram o padrao.
 - **Segredo de qualquer tipo.** Nenhuma chave, token ou senha. O sistema referencia credencial pelo
-  **nome da variavel**, nunca pelo valor, e isso e uma regra do proprio sistema.
+  **nome da variavel**, nunca pelo valor.
 - **Endereco de infraestrutura.** Sem IP, sem dominio proprio, sem nome de container, sem caminho
-  pessoal de maquina. Onde havia um, entrou um marcador tipo `<SEU_CAMINHO>` ou `<SEUS_CAMINHOS_PROTEGIDOS>`.
-- **A memoria acumulada.** Memoria e da operacao que a gerou. O modelo traz o **mecanismo** de
-  memoria, vazio, pronto para voce encher com a sua.
+  pessoal de maquina. Onde havia um, entrou um marcador tipo `<SEU_CAMINHO>`.
+- **A memoria acumulada.** Memoria e da operacao que a gerou. O modelo traz o **mecanismo**, vazio,
+  pronto para voce encher com a sua.
+
+---
+
+## Contribuindo
+
+Leia [CONTRIBUTING.md](CONTRIBUTING.md). Resumo: issue antes de pull request grande, portugues do
+Brasil na documentacao, nenhum dado real de ninguem em exemplo.
+
+**Achou vulnerabilidade?** Veja [SECURITY.md](SECURITY.md) para reporte responsavel.
+
+---
+
+## Licenca
+
+[MIT](LICENSE) (c) 2026 [Gian Marco Menegussi Scaglianti](https://github.com/simtransforma)
 
 ---
 
 ## Referencias e credito de origem
 
-Quase nada aqui foi inventado do zero. O que e original e a **costura**: juntar as pecas abaixo num
-sistema unico com travas de verdade. Cada peca e creditada. A lista completa, com o que exatamente
-veio de cada uma, esta em [docs/08-REFERENCIAS.md](docs/08-REFERENCIAS.md).
+Quase nada aqui foi inventado do zero. O original e a **costura**: juntar as pecas abaixo num
+sistema unico com travas de verdade. Lista completa, com o que veio de cada uma:
+[docs/08-REFERENCIAS.md](docs/08-REFERENCIAS.md).
 
 ### Base da plataforma
 
@@ -327,7 +434,7 @@ veio de cada uma, esta em [docs/08-REFERENCIAS.md](docs/08-REFERENCIAS.md).
 
 | Origem | O que veio dela | Link |
 |---|---|---|
-| **superpowers** | Brainstorming, escrita de plano, desenvolvimento orientado a subagente, depuracao sistematica, verificacao antes de concluir. A nossa lei declara a precedencia entre as duas | [claude-plugins-official](https://github.com/anthropics/claude-plugins-official) |
+| **superpowers** | Brainstorming, escrita de plano, desenvolvimento orientado a subagente, depuracao sistematica, verificacao antes de concluir | [claude-plugins-official](https://github.com/anthropics/claude-plugins-official) |
 | **claude-mem** | A camada de memoria de sessao e a captura automatica ao fim da sessao | [thedotmack/claude-mem](https://github.com/thedotmack/claude-mem) |
 | **Obsidian** | O espelho legivel da memoria duravel, em markdown com links entre notas | [obsidian.md](https://obsidian.md) |
 | **gitleaks** | A varredura de segredo que roda antes de commit e no historico | [gitleaks/gitleaks](https://github.com/gitleaks/gitleaks) |
@@ -339,32 +446,27 @@ veio de cada uma, esta em [docs/08-REFERENCIAS.md](docs/08-REFERENCIAS.md).
 
 ### O que nasceu de incidente proprio
 
-Estas regras nao vieram de livro. Vieram de coisa que deu errado. Estao aqui sem o contexto da
+Regras que nao vieram de livro, vieram de coisa que deu errado. Estao aqui sem o contexto da
 operacao que as gerou, porque o aprendizado vale e o dado nao e seu.
 
 | Regra | Incidente que a gerou |
 |---|---|
 | **"nao achei em X" nunca e "nao existe"** | Um agente olhou uma unica listagem de containers, nao achou um servico e declarou que ele nao existia. O servico existia, instalado no host, fora do alcance daquele comando |
 | **Redigir segredo antes de escrever em disco** | Um hook de seguranca registrava a linha de comando completa que bloqueava. Comando com header de autenticacao virou chave em texto claro no log. A correcao foi redigir antes da escrita, nunca depois |
-| **Portao anti desistencia** | Um agente declarou "nao tenho acesso" depois de procurar credencial em um unico lugar. O acesso existia e estava documentado numa skill que ele nunca leu. Virou regra: esgotar quatro fontes antes de dizer que esta bloqueado |
+| **Portao anti-desistencia** | Um agente declarou "nao tenho acesso" depois de procurar credencial em um unico lugar. O acesso existia, documentado numa skill que ele nunca leu. Virou regra: esgotar quatro fontes antes de dizer que esta bloqueado |
 | **O orquestrador nao executa** | A trava foi desligada por conveniencia. Em pouco mais de um mes o orquestrador tinha construido um projeto inteiro sozinho, sem revisao e sem delegar. Foi religada e nunca mais desligada |
 | **Dono unico de arquivo por onda** | Tres agentes commitando no mesmo repositorio em paralelo causaram corrida de indice no git. Virou regra: um dono por arquivo, no maximo tres agentes por onda |
-| **Nome de variavel, nunca valor** | Segredo apareceu em relatorio de diagnostico. Virou regra absoluta: cita se o nome da variavel, o valor nunca sai |
+| **Nome de variavel, nunca valor** | Segredo apareceu em relatorio de diagnostico. Virou regra absoluta: cita-se o nome da variavel, o valor nunca sai |
 | **Placeholder de redacao tem que ser burro** | Um marcador de redacao criativo, longo e com hash, foi lido pelo proprio detector de segredo como string de alta entropia. O remedio virou o problema. Placeholder passou a ser minusculo e obvio |
 
 ---
 
-## Contribuindo
+<div align="center">
 
-Leia [CONTRIBUTING.md](CONTRIBUTING.md). Resumo: issue antes de pull request grande, portugues do
-Brasil na documentacao, e nenhum dado real de ninguem em exemplo.
+**Construido com agentes, para agentes.**
 
-## Licenca
+[Instalacao](#instalacao-em-5-passos) - [Documentacao](#documentacao-por-camada) - [Issues](https://github.com/simtransforma/HAOS-CC-Model/issues) - [Contribuindo](CONTRIBUTING.md)
 
-MIT. Veja [LICENSE](LICENSE).
+**Criado por** [Gian Marco Menegussi Scaglianti](https://github.com/simtransforma) / HAU Solucoes Digitais
 
-## Autoria
-
-Sistema concebido e mantido por **Gian Marco Menegussi Scaglianti**. Este modelo publico e uma versao
-sanitizada do sistema em producao, preparada para servir de ponto de partida a quem quiser montar o
-seu.
+</div>
