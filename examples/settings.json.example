@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+
+  "_leia_antes": "Copie para ~/.claude/settings.json (ou junte com o seu) e troque cada <...>. CAMINHOS: use SEMPRE barra normal '/', tambem no Windows (ex.: C:/Users/ana/meu-projeto). Barra invertida crua quebra o JSON (erro 'Invalid \\escape'). HAOS_GUARD_PROFILE e obrigatorio: sem ele o guard bloqueia toda mutacao do orquestrador. Varias raizes: separe por ';'. PYTHON: os comandos usam 'python'; em Linux e macOS troque por 'python3' se 'python' nao existir. NUNCA coloque HAOS_GUARD_MAINTENANCE aqui: o modo manutencao e so para o shell de uma sessao de manutencao. Nenhuma variavel aqui guarda segredo, so caminho.",
+
+  "env": {
+    "HAOS_GUARD_PROFILE": "<CAMINHO_ABSOLUTO_DO_SEU_PROJETO>",
+    "HAOS_HOME": "<SEU_CAMINHO>/.claude",
+    "HAOS_MEMORY_DIR": "<SEU_CAMINHO>/.claude/projects/<SEU_PROJETO>/memory",
+    "HAOS_SECRETS_FILE": "<SEU_CAMINHO_DE_SEGREDOS>/variaveis.env"
+  },
+
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell|Edit|Write|MultiEdit|NotebookEdit",
+        "hooks": [
+          { "type": "command", "command": "python \"<SEU_CAMINHO>/.claude/hooks/main_guard.py\"", "timeout": 10 }
+        ]
+      },
+      {
+        "matcher": "Agent|Task",
+        "hooks": [
+          { "type": "command", "command": "python \"<SEU_CAMINHO>/.claude/hooks/model_guard.py\"", "timeout": 10 },
+          { "type": "command", "command": "python \"<SEU_CAMINHO>/.claude/hooks/handoff_guard.py\"", "timeout": 10 },
+          { "type": "command", "command": "python \"<SEU_CAMINHO>/.claude/hooks/antidesistencia.py\"", "timeout": 10 }
+        ]
+      }
+    ],
+
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          { "type": "command", "command": "python \"<SEU_CAMINHO>/.claude/hooks/prompt_router.py\"", "timeout": 10 }
+        ]
+      }
+    ],
+
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear",
+        "hooks": [
+          { "type": "command", "command": "python \"<SEU_CAMINHO>/.claude/hooks/session_start.py\"", "timeout": 10 }
+        ]
+      }
+    ],
+
+    "Stop": [
+      {
+        "hooks": [
+          { "type": "command", "command": "python \"<SEU_CAMINHO>/.claude/hooks/session_end.py\"", "timeout": 15 }
+        ]
+      }
+    ],
+
+    "PostCompact": [
+      {
+        "hooks": [
+          { "type": "command", "command": "python \"<SEU_CAMINHO>/.claude/hooks/post_compact.py\"", "timeout": 10 }
+        ]
+      }
+    ]
+  }
+}

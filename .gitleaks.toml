@@ -1,0 +1,32 @@
+# Configuracao de varredura de segredo para o HAOS CC Model.
+# Estende o conjunto padrao do gitleaks com regras proprias.
+# Uso:  gitleaks dir . -c .gitleaks.toml --no-banner --redact
+#       gitleaks detect --source . -c .gitleaks.toml --no-banner --redact
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "haos-conn-string-password"
+description = "Credencial embutida em URL de conexao"
+regex = '''(?i)\b[a-z][a-z0-9+.\-]*://[^\s/:@]+:[^\s/@]{6,}@'''
+tags = ["credential", "url"]
+
+[[rules]]
+id = "haos-auth-header-value"
+description = "Valor de cabecalho de autenticacao em texto claro"
+regex = '''(?i)\b(x-api-key|api-key|apikey|authorization|x-auth-token|private-token)\s*[:=]\s*["']?[A-Za-z0-9_\-\.]{16,}'''
+tags = ["credential", "header"]
+
+[allowlist]
+description = "Marcadores e exemplos publicos conhecidos"
+regexes = [
+  '''<[A-Z_]+>''',                 # marcadores tipo <SEU_CAMINHO>
+  '''(?i)\b(user|usuario):(password|senha|123456)@''',
+  '''eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9''',   # JWT de exemplo publico
+  '''(?i)\bexample\.(com|org|net)\b''',
+  '''(?i)\bexemplo\.com\.br\b''',
+]
+paths = [
+  '''(?i)docs/08-REFERENCIAS\.md''',
+]

@@ -1,0 +1,67 @@
+# =====================================================
+# HAOS CC Model - .gitignore
+# Regra dura: nada de segredo, estado local ou memoria
+# =====================================================
+
+# Segredo e ambiente
+*.env
+.env
+**/_secrets/
+**/secrets/
+*.key
+*.pem
+*.p12
+*.pfx
+*.pub
+!.env.example
+!*.env.template
+
+# Memoria e estado local: NUNCA versionar
+projects/
+**/projects/
+.claude/
+.claude-mem/
+**/memory/
+*.jsonl
+
+# Log: pode conter argumento de comando
+*.log
+*.log.*
+logs/
+
+# Backup de edicao: copia pior do que o historico do git ja guarda
+*.bak
+*.bak*
+*~
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.venv/
+venv/
+
+# Node
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Build
+dist/
+build/
+
+# Backup do historico antigo (nao versionar; evidencia local apenas)
+.git-historico-sujo-20260923/

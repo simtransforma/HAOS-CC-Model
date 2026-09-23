@@ -1,0 +1,21 @@
+{
+  "name": "haos-model",
+  "description": "HAOS CC Model. Sistema multi agente de referencia para Claude Code: orquestrador com trava de delegacao, 30 agentes especialistas, skills de sistema e metodo, hooks de seguranca e memoria persistente. Modelo publico e sanitizado, feito para ser clonado e adaptado.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Gian Marco Menegussi Scaglianti"
+  },
+  "homepage": "https://github.com/<SEU_USUARIO>/HAOS-CC-Model",
+  "repository": "https://github.com/<SEU_USUARIO>/HAOS-CC-Model",
+  "license": "MIT",
+  "keywords": [
+    "claude-code",
+    "multi-agent",
+    "hooks",
+    "skills",
+    "subagents",
+    "orquestracao",
+    "memoria",
+    "seguranca"
+  ]
+}
